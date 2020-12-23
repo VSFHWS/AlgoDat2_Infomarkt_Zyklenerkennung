@@ -1,4 +1,4 @@
-package de.fhws.fiw.AlgoDat2.Zyklenerkennung.Model;
+package de.fhws.fiw.AlgoDat2.Zyklenerkennung.Controler;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
