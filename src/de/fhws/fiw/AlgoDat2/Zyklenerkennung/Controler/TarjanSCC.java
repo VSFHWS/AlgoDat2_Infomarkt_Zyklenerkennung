@@ -17,8 +17,7 @@ public class TarjanSCC
 	private Stack<Node> nodeStack;
 	private Map<Node, Integer> indexMap;
 	private Map<Node, Integer> lowMap;
-	DirectedWeightedGraph newSCCGraph;
-	DirectedWeightedGraph unvisited;
+	private DirectedWeightedGraph unvisited;
 	
 	public TarjanSCC(DirectedWeightedGraph graph)
 	{
@@ -37,7 +36,6 @@ public class TarjanSCC
 		
 		for(Node n : allNodes)
 		{
-			newSCCGraph = new DirectedWeightedGraph();
 			if(indexMap.get(n) == null)
 				result.addAll(this.getSingleSCC(n));
 		}

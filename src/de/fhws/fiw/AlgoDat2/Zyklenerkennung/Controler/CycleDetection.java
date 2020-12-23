@@ -25,6 +25,7 @@ public class CycleDetection
 		
 		String graph1 = 
 			  "1,2" + "\n"
+			+ "1,5" + "\n"
 			+ "1,8" + "\n"
 			+ "2,3" + "\n"
 			+ "2,7" + "\n"
