@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import de.fhws.fiw.AlgoDat2.Zyklenerkennung.Model.CSVReaderWriter;
 import de.fhws.fiw.AlgoDat2.Zyklenerkennung.Model.DirectedWeightedGraph;
+import de.fhws.fiw.AlgoDat2.Zyklenerkennung.View.GraphVisualizer;
 
 public class CycleDetection
 {
@@ -45,12 +46,13 @@ public class CycleDetection
 	
 	private static DirectedWeightedGraph createDirectedGraph(String filePath)
 	{
+		GraphVisualizer graphVis = new GraphVisualizer();
 		System.out.println("Generating graph object from " + filePath + " ....");
 		DirectedWeightedGraph graph = new DirectedWeightedGraph();
 		graph.fromFile(filePath, false, false);
 		
 		System.out.println("Graph has successfully been generated.");
-		graph.displayGraph();
+		graphVis.displayGraph(graph);
 		
 		return graph;
 	}
@@ -59,10 +61,11 @@ public class CycleDetection
 	{
 		TarjanSCC tarjanSCC = new TarjanSCC(graph);
 		ArrayList<DirectedWeightedGraph> sccList = tarjanSCC.getSCCs();
+		GraphVisualizer graphVis = new GraphVisualizer();
 		
 		for(DirectedWeightedGraph g : sccList)
 		{
-			g.displayGraph();
+			graphVis.displayGraph(g);
 		}
 	}
 }
