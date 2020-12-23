@@ -1,6 +1,7 @@
 package de.fhws.fiw.AlgoDat2.Zyklenerkennung.Controler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -66,26 +67,32 @@ public class TarjanSCC
 				res.addAll(getSingleSCC(suc));
 				lowMap.put(n, Math.min(lowMap.get(n), lowMap.get(suc)));
 			}
-			else if(nodeStack.contains(n))
+			else if(nodeStack.contains(suc))		//If contained -> back edge; if not -> cross edge (= has to be ignored) 
 			{
-				lowMap.put(n, Math.min(lowMap.get(n), lowMap.get(suc)));
+				lowMap.put(n, Math.min(lowMap.get(n), indexMap.get(suc)));
 			}
 		}
 		
 		if(lowMap.get(n).equals(indexMap.get(n)))
 		{
 			ArrayList<Node> scc = new ArrayList<>();
-			Node temp =  nodeStack.peek();
 			
-			while(temp.equals(n))
+			while(nodeStack.peek() != n)
 			{
-				temp = nodeStack.pop();
+				Node temp = nodeStack.pop();
 				scc.add(temp);
-				temp = nodeStack.peek();
 			}
 			
+			scc.add(nodeStack.peek());
+			
 			if(!scc.isEmpty())
+			{
+				Collections.reverse(scc);
 				res.add(scc);
+			}
+				
+			
+			nodeStack.pop();
 		}
 		
 		return res;
@@ -100,7 +107,7 @@ public class TarjanSCC
 			
 			for(Node n : arrLNodes)
 			{
-				graph.addNode(n);
+				graph.addEdgeRefactoredNode(n, arrLNodes);
 			}
 			
 			sccList.add(graph);

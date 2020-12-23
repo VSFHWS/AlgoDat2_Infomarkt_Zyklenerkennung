@@ -13,6 +13,13 @@ public class Node
 		edges = new ArrayList<>();
 	}
 	
+	public Node(Node n)
+	{
+		this.id = n.id;
+		this.description = n.description;
+		edges = new ArrayList<>();
+	}
+	
 	public int getId()
 	{
 		return id;

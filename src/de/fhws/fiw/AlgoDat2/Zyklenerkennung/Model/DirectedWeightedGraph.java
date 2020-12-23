@@ -99,6 +99,50 @@ public class DirectedWeightedGraph
 		nodes.add(n);
 	}
 	
+	public void addEdgeRefactoredNode(Node n, ArrayList<Node> availableNodes)
+	{
+		Node newNode;
+		ArrayList<Edge> edges =  n.getEdges();
+		
+		if(!this.contains(n.getId()))
+		{
+			newNode = new Node(n);
+		}
+		else
+		{
+			newNode = this.getNodeByID(n.getId());
+		}
+		
+		if(edges.isEmpty())
+		{
+			nodes.add(newNode);
+		}
+		
+		for(Edge e : n.getEdges())
+		{
+			Node dest = e.getDestinationNode();
+			
+			for(Node avail : availableNodes)
+			{
+				if(avail.getId() == dest.getId())
+				{
+					newNode.addDirectedEdge(dest);
+					break;
+				}
+			}
+			
+			if(!this.contains(newNode.getId()))
+			{
+				nodes.add(newNode);
+			}
+				
+			if(!this.contains(dest.getId()))
+			{
+				nodes.add(dest);
+			}
+		}
+	}
+	
 	public ArrayList<Node> getNodes()
 	{
 		return this.nodes;
@@ -178,6 +222,17 @@ public class DirectedWeightedGraph
 		for(Node n : nodes)
 		{
 			ArrayList<Edge> edges = n.getEdges();
+			if(edges.isEmpty() && nodes.size() == 1)
+			{
+				if(n.getDescription() != null)
+					descrS = "(" + n.getDescription() + ")";
+				else 
+					descrS = "";
+				
+				System.out.println("edge " + n.getId() + descrS + " --" 
+						+	0d + "--> " +  n.getId() + descrD);
+			}
+			
 			for(Edge e : edges)
 			{
 				Node dest = e.getDestinationNode();
