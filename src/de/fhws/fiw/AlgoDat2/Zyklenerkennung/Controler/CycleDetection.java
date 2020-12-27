@@ -1,6 +1,5 @@
 package de.fhws.fiw.AlgoDat2.Zyklenerkennung.Controler;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import de.fhws.fiw.AlgoDat2.Zyklenerkennung.Model.DirectedWeightedGraph;
@@ -11,11 +10,14 @@ public class CycleDetection
 
 	public static void main(String[] args)
 	{
+		GraphVisualizer graphVis = new GraphVisualizer();
+		
 		generateCSVGraphs();
 		
 		DirectedWeightedGraph graph = createDirectedGraph("graph1.csv");
+		graphVis.displayGraph(graph);
 		
-		getSCCs(graph);
+		countSimpleCycles(graph);
 	}
 	
 	private static void generateCSVGraphs()
@@ -46,26 +48,26 @@ public class CycleDetection
 	
 	private static DirectedWeightedGraph createDirectedGraph(String filePath)
 	{
-		GraphVisualizer graphVis = new GraphVisualizer();
 		System.out.println("Generating graph object from " + filePath + " ....");
 		DirectedWeightedGraph graph = new DirectedWeightedGraph();
 		graph.fromFile(filePath, false, false);
 		
 		System.out.println("Graph has successfully been generated.");
-		graphVis.displayGraph(graph);
 		
 		return graph;
 	}
 	
-	public static void getSCCs(DirectedWeightedGraph graph)
+	private static void countSimpleCycles(DirectedWeightedGraph graph)
 	{
-		TarjanSCC tarjanSCC = new TarjanSCC(graph);
-		ArrayList<DirectedWeightedGraph> sccList = tarjanSCC.getSCCs();
-		GraphVisualizer graphVis = new GraphVisualizer();
+		JohnsonSimpleCycles jsc = new JohnsonSimpleCycles();
+		int amountCycles = 0;
 		
-		for(DirectedWeightedGraph g : sccList)
-		{
-			graphVis.displayGraph(g);
-		}
+		System.out.println("----------------------------------------");
+		System.out.println("Found cycles: ");
+		
+		amountCycles = jsc.getSimpleCycles(graph);
+		
+		System.out.println("----------------------------------------");
+		System.out.println("Amount cycles in Graph: " + amountCycles);
 	}
 }

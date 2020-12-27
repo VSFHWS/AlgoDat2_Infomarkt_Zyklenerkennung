@@ -15,8 +15,8 @@ public class Node
 	
 	public Node(Node n)
 	{
-		this.id = n.id;
-		this.description = n.description;
+		this.id = n.getId();
+		this.description = n.getDescription();
 		edges = new ArrayList<>();
 	}
 	
@@ -45,12 +45,30 @@ public class Node
 	
 	public void addDirectedEdge(Node destionationNode)
 	{
+		for(Edge e : edges)
+		{
+			Node source = e.getSourceNode();
+			Node dest = e.getDestinationNode();
+			
+			if((source.getId() == this.getId()) && (dest.getId() == destionationNode.getId()))
+				return;
+		}
+		
 		Edge newEdge = new Edge(this, destionationNode);
 		edges.add(newEdge);
 	}
 	
 	public void addDirectedEdge(Node destionationNode, double weight)
 	{
+		for(Edge e : edges)
+		{
+			Node source = e.getSourceNode();
+			Node dest = e.getDestinationNode();
+			
+			if((source.getId() == this.getId()) && (dest.getId() == destionationNode.getId()))
+				return;
+		}
+		
 		Edge newEdge = new Edge(this, destionationNode, weight);
 		edges.add(newEdge);
 	}

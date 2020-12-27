@@ -49,4 +49,12 @@ public class GraphVisualizer
 			}
 		}
 	}
+	
+	public void displayMultipleGraphs(ArrayList<DirectedWeightedGraph> sccList)
+	{
+		for(DirectedWeightedGraph g : sccList)
+		{
+			this.displayGraph(g);
+		}
+	}
 }

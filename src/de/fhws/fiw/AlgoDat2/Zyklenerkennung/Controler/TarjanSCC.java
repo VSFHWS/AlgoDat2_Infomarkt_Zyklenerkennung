@@ -9,6 +9,7 @@ import java.util.Stack;
 import de.fhws.fiw.AlgoDat2.Zyklenerkennung.Model.DirectedWeightedGraph;
 import de.fhws.fiw.AlgoDat2.Zyklenerkennung.Model.Edge;
 import de.fhws.fiw.AlgoDat2.Zyklenerkennung.Model.Node;
+import de.fhws.fiw.AlgoDat2.Zyklenerkennung.View.GraphVisualizer;
 
 public class TarjanSCC
 {
@@ -18,6 +19,7 @@ public class TarjanSCC
 	private Map<Node, Integer> indexMap;
 	private Map<Node, Integer> lowMap;
 	private DirectedWeightedGraph unvisited;
+	private ArrayList<ArrayList<Node>> result;
 	
 	public TarjanSCC(DirectedWeightedGraph graph)
 	{
@@ -26,11 +28,12 @@ public class TarjanSCC
 		nodeStack = new Stack<>();
 		indexMap = new HashMap<>();
 		lowMap = new HashMap<>();
+		result = new ArrayList<>();
 	}
 	
 	public ArrayList<DirectedWeightedGraph> getSCCs()
 	{
-		ArrayList<ArrayList<Node>> result = new ArrayList<ArrayList<Node>>();
+		result = new ArrayList<ArrayList<Node>>();
 		ArrayList<Node> allNodes = graph.getNodes();
 		unvisited = new DirectedWeightedGraph(graph);
 		
@@ -98,6 +101,11 @@ public class TarjanSCC
 	
 	private ArrayList<DirectedWeightedGraph> convertToGraph(ArrayList<ArrayList<Node>> sccNodeLists)
 	{
+		/*
+		 * TODO it seems like this method doesn't convert a graph the same way if it is called from 
+		 * this class as if it was called from a foreign class. E. g. the test graph - Big SCC - 
+		 * node 6 gets two edges. both directed to the node 4. There should only be one.
+		 */
 		ArrayList<DirectedWeightedGraph> sccList = new ArrayList<>();
 		for(ArrayList<Node> arrLNodes : sccNodeLists)
 		{
@@ -112,5 +120,23 @@ public class TarjanSCC
 		}
 		
 		return sccList;
+	}
+	
+	public void displaySCCS()
+	{
+		if(result.isEmpty())
+		{
+			throw new NullPointerException("No Graph has been analyzed yet.");
+		}
+		else
+		{
+			GraphVisualizer graphVis = new GraphVisualizer();
+			ArrayList<DirectedWeightedGraph> sccList = this.convertToGraph(result);
+			
+			for(DirectedWeightedGraph g : sccList)
+			{
+				graphVis.displayGraph(g);
+			}
+		}
 	}
 }

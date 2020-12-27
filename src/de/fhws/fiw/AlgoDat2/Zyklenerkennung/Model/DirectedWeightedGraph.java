@@ -101,53 +101,71 @@ public class DirectedWeightedGraph
 		nodes.add(n);
 	}
 	
-	public void addEdgeRefactoredNode(Node n, ArrayList<Node> availableNodes)
+	public void addEdgeRefactoredNode(Node inputNode, ArrayList<Node> availableNodes)
 	{
-		Node newNode;
-		ArrayList<Edge> edges =  n.getEdges();
+		Node newNode = setNode(inputNode);
+		ArrayList<Edge> edgeList = inputNode.getEdges();
 		
-		if(!this.contains(n.getId()))
-		{
-			newNode = new Node(n);
-		}
-		else
-		{
-			newNode = this.getNodeByID(n.getId());
-		}
-		
-		if(edges.isEmpty())
+		//If inputNode is the only Node in that (sub-)graph
+		if(edgeList.isEmpty())
 		{
 			nodes.add(newNode);
 		}
 		
-		for(Edge e : n.getEdges())
+		
+		//Go through every edge of this node and check if Node is
+		//going to be used in new graph
+		for(Edge e : edgeList)
 		{
 			Node dest = e.getDestinationNode();
 			
 			for(Node avail : availableNodes)
 			{
-				if(avail.getId() == dest.getId())
+				int availID = avail.getId();
+				int destID = dest.getId();
+				if(availID == destID)
 				{
+					if(!this.contains(dest.getId()))
+					{
+						nodes.add(dest);
+					}
+					
 					newNode.addDirectedEdge(dest);
 					break;
 				}
 			}
-			
-			if(!this.contains(newNode.getId()))
-			{
-				nodes.add(newNode);
-			}
-				
-			if(!this.contains(dest.getId()))
-			{
-				nodes.add(dest);
-			}
 		}
+	}
+	
+	private Node setNode(Node inputNode)
+	{
+		Node newNode; 
+		int inNodeID = inputNode.getId();
+		String inNodeDescription = inputNode.getDescription();
+		
+		if(!this.contains(inNodeID))
+		{
+			newNode = new Node();
+			newNode.setId(inNodeID);
+			newNode.setDescription(inNodeDescription);
+			nodes.add(newNode);
+		}
+		else
+		{
+			newNode = this.getNodeByID(inNodeID);
+		}
+		
+		return newNode;
 	}
 	
 	public ArrayList<Node> getNodes()
 	{
 		return this.nodes;
+	}
+	
+	public Node getFirstNode()
+	{
+		return this.nodes.get(0);
 	}
 	
 	public Node getNodeByID(int id)
