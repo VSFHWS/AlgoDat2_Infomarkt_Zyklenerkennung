@@ -70,8 +70,17 @@ public class JohnsonSimpleCycles
 	{
 		boolean hasCirciuts = false; 
 		
-		Node n = graph.getFirstNode();
-		hasCirciuts = processJohnsonAlgorithm(graph, n, n.getId());
+		while(!graph.isEmpty())
+		{
+			Node n = graph.getFirstNode();
+			if(processJohnsonAlgorithm(graph, n, n.getId()))
+				hasCirciuts = true;
+			
+			graph.purgeNode(n);
+			/* TODO Johnsons algorithm works now with the given SCCs. Next it should remove the
+			 * already used nodes in the SCC and treat the remaining as new SCC */
+		}
+		
 		
 		return hasCirciuts;
 	}

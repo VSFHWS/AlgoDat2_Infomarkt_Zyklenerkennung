@@ -60,20 +60,17 @@ public class CycleDetection
 		JohnsonSimpleCycles jsc = new JohnsonSimpleCycles();
 		//boolean hasSimpleCycles = jsc.hasSimpleCycles(graph);
 		boolean hasSimpleCycles = true; /* TODO this constant ist only for testing - remove after finishing */
+		System.out.println("----------------------------------------");
 		
 		if(hasSimpleCycles)
 		{
 			System.out.println("Graph has simple cycles!\n");
-			
-			int amountCycles = 0;
-			
-			System.out.println("----------------------------------------");
 			System.out.println("Found cycles: ");
 			
-			amountCycles = jsc.getAmountSimpleCycles(graph);
+			int amountCycles = jsc.getAmountSimpleCycles(graph);
 			
 			System.out.println("----------------------------------------");
-			System.out.println("Amount cycles in Graph: " + amountCycles);
+			System.out.println("Amount of cycles in Graph: " + amountCycles);
 		}
 		else
 		{

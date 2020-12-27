@@ -1,6 +1,7 @@
 package de.fhws.fiw.AlgoDat2.Zyklenerkennung.Model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Node
 {
@@ -71,5 +72,29 @@ public class Node
 		
 		Edge newEdge = new Edge(this, destionationNode, weight);
 		edges.add(newEdge);
+	}
+	
+	public boolean hasEdge(Node inputNode)
+	{
+		for(Iterator<Edge> edgesIter = this.getEdges().iterator(); edgesIter.hasNext();)
+		{
+			Edge edge = edgesIter.next();
+			Node dest = edge.getDestinationNode();
+			if(dest.getId() == inputNode.getId())
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public void removeEdge(Node inputNode)
+	{
+		for(Iterator<Edge> edgesIter = this.getEdges().iterator(); edgesIter.hasNext();)
+		{
+			Edge edge = edgesIter.next();
+			Node dest = edge.getDestinationNode();
+			if(dest.getId() == inputNode.getId())
+				edgesIter.remove();
+		}
 	}
 }

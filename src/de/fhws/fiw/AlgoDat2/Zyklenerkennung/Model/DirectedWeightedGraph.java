@@ -231,4 +231,27 @@ public class DirectedWeightedGraph
 			}
 		}
 	}
+	
+	public void purgeNode(Node n)
+	{
+		Node intern = null;
+		for(Iterator<Node> it = nodes.iterator(); it.hasNext();)
+		{
+			intern = it.next();
+			if(intern.equals(n))
+			{
+				it.remove();
+			}
+			else 
+			{
+				if(intern.hasEdge(n))
+					intern.removeEdge(n);
+			}
+		}
+	}
+	
+	public boolean isEmpty()
+	{
+		return nodes.isEmpty();
+	}
 }
