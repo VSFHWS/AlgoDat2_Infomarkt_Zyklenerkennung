@@ -1,7 +1,5 @@
 package de.fhws.fiw.AlgoDat2.Zyklenerkennung.Controler;
 
-import java.util.ArrayList;
-
 import de.fhws.fiw.AlgoDat2.Zyklenerkennung.Model.DirectedWeightedGraph;
 import de.fhws.fiw.AlgoDat2.Zyklenerkennung.View.GraphVisualizer;
 
@@ -60,14 +58,26 @@ public class CycleDetection
 	private static void countSimpleCycles(DirectedWeightedGraph graph)
 	{
 		JohnsonSimpleCycles jsc = new JohnsonSimpleCycles();
-		int amountCycles = 0;
+		//boolean hasSimpleCycles = jsc.hasSimpleCycles(graph);
+		boolean hasSimpleCycles = true; /* TODO this constant ist only for testing - remove after finishing */
 		
-		System.out.println("----------------------------------------");
-		System.out.println("Found cycles: ");
-		
-		amountCycles = jsc.getSimpleCycles(graph);
-		
-		System.out.println("----------------------------------------");
-		System.out.println("Amount cycles in Graph: " + amountCycles);
+		if(hasSimpleCycles)
+		{
+			System.out.println("Graph has simple cycles!\n");
+			
+			int amountCycles = 0;
+			
+			System.out.println("----------------------------------------");
+			System.out.println("Found cycles: ");
+			
+			amountCycles = jsc.getAmountSimpleCycles(graph);
+			
+			System.out.println("----------------------------------------");
+			System.out.println("Amount cycles in Graph: " + amountCycles);
+		}
+		else
+		{
+			System.out.println("Graph doesn't have any simple cycles!\n");
+		}
 	}
 }

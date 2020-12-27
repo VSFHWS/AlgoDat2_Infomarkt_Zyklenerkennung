@@ -3,6 +3,7 @@ package de.fhws.fiw.AlgoDat2.Zyklenerkennung.Controler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,8 +16,6 @@ import de.fhws.fiw.AlgoDat2.Zyklenerkennung.Model.Node;
 
 public class JohnsonSimpleCycles
 {
-	private DirectedWeightedGraph graph;
-	private ArrayList<Node> unvisited;
 	private List<Stack<Integer>> circuits;
 	private Stack<Integer> processed;
 	private HashSet<Integer> blockedSet;
@@ -25,41 +24,59 @@ public class JohnsonSimpleCycles
 	
 	public JohnsonSimpleCycles()
 	{
-		//this.unvisited = new ArrayList<>(graph.getNodes());
 		circuits = new ArrayList<Stack<Integer>>();
 		processed = new Stack<>();
 		blockedSet = new HashSet<>();
 		blockedMap = new HashMap<>();
 	}
 	
-	public int getSimpleCycles(DirectedWeightedGraph graph)
+	public boolean hasSimpleCycles(DirectedWeightedGraph graph)
 	{
-		this.graph = graph;
-		int amountCyclesInGraph = 0;
-		TarjanSCC tarjan = new TarjanSCC(graph);
+		boolean hasSimpleCycles =  getSimpleCycles(graph);
 		
+		circuits = new ArrayList<>();
+		
+		return hasSimpleCycles;
+	}
+	
+	public int getAmountSimpleCycles(DirectedWeightedGraph graph)
+	{
+		getSimpleCycles(graph);
+		int amountCycles = circuits.size();
+		
+		circuits = new ArrayList<>();
+		
+		return amountCycles;
+	}
+	
+	private boolean getSimpleCycles(DirectedWeightedGraph graph)
+	{
+		boolean hasCirciuts = false; 
+		TarjanSCC tarjan = new TarjanSCC(graph);
 		ArrayList<DirectedWeightedGraph> sccs =  tarjan.getSCCs();
 		
 		for(DirectedWeightedGraph g : sccs)
 		{
-			amountCyclesInGraph += controlJohnsonAlgorithm(g);
+			if(controlJohnsonAlgorithm(g))
+				hasCirciuts = true;
+			
+			cleanup();
 		}
 		
-		return amountCyclesInGraph;
+		return hasCirciuts;
 	}
 	
-	
-	private int controlJohnsonAlgorithm(DirectedWeightedGraph graph)
+	private boolean controlJohnsonAlgorithm(DirectedWeightedGraph graph)
 	{
-		int result = 0;
+		boolean hasCirciuts = false; 
 		
 		Node n = graph.getFirstNode();
-		result += processJohnsonAlgorithm(n, n.getId());
+		hasCirciuts = processJohnsonAlgorithm(graph, n, n.getId());
 		
-		return result;
+		return hasCirciuts;
 	}
 	
-	private int processJohnsonAlgorithm(Node n, int startIndex)
+	private boolean processJohnsonAlgorithm(DirectedWeightedGraph graph, Node n, int startIndex)
 	{
 		int amountCyclesInGraph = 0;
 		int inputNodeID = n.getId();
@@ -69,17 +86,23 @@ public class JohnsonSimpleCycles
 		
 		ArrayList<Edge> successors = n.getEdges();
 		int successorID = -1;
-		for(Edge e : successors)
+		Iterator<Edge> successorIT = successors.iterator();
+		while(successorIT.hasNext())
 		{
-			Node successor = e.getDestinationNode();
-			successorID = successor.getId();
-			successor = graph.getNodeByID(successorID);
+			Edge e = successorIT.next();
+			successorID = e.getDestinationNode().getId();
+			Node successor = graph.getNodeByID(successorID);
 			
 			if(!(successorID == startIndex))
 			{
 				if(!blockedSet.contains(successorID))
 				{
-					amountCyclesInGraph += processJohnsonAlgorithm(successor, startIndex);
+					if(processJohnsonAlgorithm(graph, successor, startIndex))
+						isPartOfCycle = true;
+					
+					if(!successorIT.hasNext() && blockedMap.containsValue(successorID)
+							&& !isPartOfCycle)
+						blockedMap.put(successorID, inputNodeID);
 				}
 				else
 				{
@@ -92,52 +115,54 @@ public class JohnsonSimpleCycles
 				isPartOfCycle = true;
 				Stack<Integer> cycle = (Stack<Integer>) processed.clone();
 				cycle.push(successorID);
-				System.out.println(reverseStack(cycle));
-				
-				blockedSet.remove(inputNodeID);
+				System.out.println(cycle);
+				circuits.add(cycle);
 			}
 		}
 		
 		
 		processed.pop();
-		if(!isPartOfCycle)
+		if(isPartOfCycle)
 		{
-			addToBlockedMapIfNeeded(n);
+			unblockNode(inputNodeID);
 		}
 		
-		return amountCyclesInGraph;
+		return isPartOfCycle;
 	}
 	
-	private Stack<Integer> reverseStack(Stack<Integer> cycle)
-	{
-		Stack<Integer> reversedStack = new Stack<>();
-		
-		while(!cycle.isEmpty())
-		{
-			reversedStack.push(cycle.pop());
-		}
-		
-		return reversedStack;
-	}
 	
-	private void addToBlockedMapIfNeeded(Node inputNode)
+	private void unblockNode(int inputNodeID)
 	{
-		int inputNodeID = inputNode.getId();
-		ArrayList<Edge> successors = inputNode.getEdges();
-		Set<Entry<Integer, Integer>> blocked = blockedMap.entrySet();
+		Set<Entry<Integer, Integer>> entrySet = blockedMap.entrySet();
+		Iterator<Entry<Integer, Integer>> entrySetIterator = entrySet.iterator();
 		
-		for(Entry<Integer, Integer> entry : blocked)
+		blockedSet.remove(inputNodeID);
+		while(entrySetIterator.hasNext())
 		{
+			Entry<Integer, Integer> entry = entrySetIterator.next();
+			int entryKey = entry.getKey();
 			int entryValue = entry.getValue();
 			
-			for(Edge successor : successors)
+			if(entryValue == inputNodeID)
 			{
-				int successorID = successor.getDestinationNode().getId();
-				
-				if(successorID == entryValue)
-					blockedMap.put(entryValue, inputNodeID);
+				blockedMap.remove(entryKey);
+				unblockNode(entryKey);
+				entrySetIterator = entrySet.iterator();
+			}
+			else if(entryKey == inputNodeID)
+			{
+				blockedMap.remove(entryKey);
+				unblockNode(entryValue);
+				entrySetIterator = entrySet.iterator();
 			}
 		}
+	}
+	
+	private void cleanup()
+	{
+		processed = new Stack<>();
+		blockedSet = new HashSet<>();
+		blockedMap = new HashMap<>();
 	}
 }
 
