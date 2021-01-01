@@ -14,11 +14,11 @@ import de.fhws.fiw.AlgoDat2.Zyklenerkennung.View.GraphVisualizer;
 public class TarjanSCC
 {
 	private int index;
-	private DirectedWeightedGraph graph;
-	private Stack<Node> nodeStack;
-	private Map<Node, Integer> indexMap;
-	private Map<Node, Integer> lowMap;
-	private DirectedWeightedGraph unvisited;
+	private DirectedWeightedGraph graph;			//input graph
+	private Stack<Node> nodeStack;					//contains the nodes in order they are traversed
+	private Map<Node, Integer> indexMap;			
+	private Map<Node, Integer> lowMap;				//contains the lowest index that the nodes have through their connections
+	private DirectedWeightedGraph unvisited;		//Graph containing all unvisited nodes
 	private ArrayList<ArrayList<Node>> result;
 	
 	public TarjanSCC(DirectedWeightedGraph graph)
@@ -31,6 +31,10 @@ public class TarjanSCC
 		result = new ArrayList<>();
 	}
 	
+	/**
+	 * Runs tarjans algorithm for every node in graph if it's not in the indexMap.
+	 * @return an ArrayList containing all subgraphs/strongly connected components
+	 */
 	public ArrayList<DirectedWeightedGraph> getSCCs()
 	{
 		result = new ArrayList<ArrayList<Node>>();
@@ -43,9 +47,15 @@ public class TarjanSCC
 				result.addAll(this.getSingleSCC(n));
 		}
 		
+		//return result after converting the ArrayList<ArrayList<Node>> to ArrayList<DirectedWeightedGraph>
 		return convertToGraph(result);
 	}
 	
+	/**
+	 * Determines one SCC for the given node recursively.
+	 * @param n current node
+	 * @return ArrayList containing the SCC
+	 */
 	private ArrayList<ArrayList<Node>> getSingleSCC(Node n)
 	{
 		int sucId = -1;
@@ -56,6 +66,8 @@ public class TarjanSCC
 		unvisited.deleteNode(n);
 		ArrayList<ArrayList<Node>> res = new ArrayList<>();
 		
+		//For every edge of given node check if it has visited before and according to that set 
+		//the lowMap of that node
 		ArrayList<Edge> successors = n.getEdges();
 		for(Edge e : successors)
 		{
@@ -78,6 +90,7 @@ public class TarjanSCC
 		{
 			ArrayList<Node> scc = new ArrayList<>();
 			
+			//pop every node from stack and save it until the next node on stack is the current node
 			while(nodeStack.peek() != n)
 			{
 				Node temp = nodeStack.pop();
@@ -88,10 +101,10 @@ public class TarjanSCC
 			
 			if(!scc.isEmpty())
 			{
+				//reverse Stack so that the SCC will be in the same order the graph was traversed through
 				Collections.reverse(scc);
 				res.add(scc);
 			}
-				
 			
 			nodeStack.pop();
 		}
@@ -99,13 +112,13 @@ public class TarjanSCC
 		return res;
 	}
 	
+	/**
+	 * converts the result of tarjans algorithm back into DirectedWeightedGraphs and saves them in an ArrayList
+	 * @param sccNodeLists result of tarjans algorithm
+	 * @return ArrayList containing all found SCCs as DirectedWeightedGraphs
+	 */
 	private ArrayList<DirectedWeightedGraph> convertToGraph(ArrayList<ArrayList<Node>> sccNodeLists)
 	{
-		/*
-		 * TODO it seems like this method doesn't convert a graph the same way if it is called from 
-		 * this class as if it was called from a foreign class. E. g. the test graph - Big SCC - 
-		 * node 6 gets two edges. both directed to the node 4. There should only be one.
-		 */
 		ArrayList<DirectedWeightedGraph> sccList = new ArrayList<>();
 		for(ArrayList<Node> arrLNodes : sccNodeLists)
 		{
@@ -122,6 +135,9 @@ public class TarjanSCC
 		return sccList;
 	}
 	
+	/**
+	 * Display all found SCCs
+	 */
 	public void displaySCCS()
 	{
 		if(result.isEmpty())
@@ -133,10 +149,8 @@ public class TarjanSCC
 			GraphVisualizer graphVis = new GraphVisualizer();
 			ArrayList<DirectedWeightedGraph> sccList = this.convertToGraph(result);
 			
-			for(DirectedWeightedGraph g : sccList)
-			{
-				graphVis.displayGraph(g);
-			}
+			System.out.println("\nStrongly Connected Components:\n");
+			graphVis.displayMultipleGraphs(sccList);
 		}
 	}
 }

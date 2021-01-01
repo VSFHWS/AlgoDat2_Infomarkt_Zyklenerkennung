@@ -44,6 +44,10 @@ public class Node
 		return edges;
 	}
 	
+	/**
+	 * Adds an directed edge to the node
+	 * @param destionationNode node to which an edge should be created
+	 */
 	public void addDirectedEdge(Node destionationNode)
 	{
 		for(Edge e : edges)
@@ -59,6 +63,11 @@ public class Node
 		edges.add(newEdge);
 	}
 	
+	/**
+	 * Adds an directed weighted edge to the node
+	 * @param destionationNode node to which an edge should be created
+	 * @param weight weight of the edge
+	 */
 	public void addDirectedEdge(Node destionationNode, double weight)
 	{
 		for(Edge e : edges)
@@ -74,6 +83,11 @@ public class Node
 		edges.add(newEdge);
 	}
 	
+	/**
+	 * Checks if this node has an edge to the input node
+	 * @param inputNode node to be searched for in the edges of this node
+	 * @return true if the edge was found false if it wasn't
+	 */
 	public boolean hasEdge(Node inputNode)
 	{
 		for(Iterator<Edge> edgesIter = this.getEdges().iterator(); edgesIter.hasNext();)
@@ -87,8 +101,13 @@ public class Node
 		return false;
 	}
 	
+	/**
+	 * Removes an edge between this node and the input node
+	 * @param inputNode node to be searched for in the edges of this node
+	 */
 	public void removeEdge(Node inputNode)
 	{
+		//used an iterator (also iterator.remove()) to avoid ConcurrentModificationException
 		for(Iterator<Edge> edgesIter = this.getEdges().iterator(); edgesIter.hasNext();)
 		{
 			Edge edge = edgesIter.next();

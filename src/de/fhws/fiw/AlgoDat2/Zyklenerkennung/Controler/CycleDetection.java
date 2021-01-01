@@ -13,11 +13,15 @@ public class CycleDetection
 		generateCSVGraphs();
 		
 		DirectedWeightedGraph graph = createDirectedGraph("graph1.csv");
+		System.out.println("----------------------------------------");
 		graphVis.displayGraph(graph);
 		
 		countSimpleCycles(graph);
 	}
 	
+	/**
+	 * Generates a hard coded test graph and writes it into a csv file
+	 */
 	private static void generateCSVGraphs()
 	{
 		System.out.println("Generating test graph in .csv file ....");
@@ -44,6 +48,11 @@ public class CycleDetection
 		System.out.println("CSV has successfully been created.");
 	}
 	
+	/**
+	 * Gets a directed weighted graph from CSV file
+	 * @param filePath path of the file to be used as graph
+	 * @return directed weighted graph
+	 */
 	private static DirectedWeightedGraph createDirectedGraph(String filePath)
 	{
 		System.out.println("Generating graph object from " + filePath + " ....");
@@ -55,20 +64,24 @@ public class CycleDetection
 		return graph;
 	}
 	
+	/**
+	 * Checks if a graph has simple cycles (johnson) and counts them if they exists.
+	 * Also the cycles will be displayed in console
+	 * @param graph the graph that is going to be analyzed
+	 */
 	private static void countSimpleCycles(DirectedWeightedGraph graph)
 	{
+		//Class that has johnsons algorithm implemented
 		JohnsonSimpleCycles jsc = new JohnsonSimpleCycles();
-		//boolean hasSimpleCycles = jsc.hasSimpleCycles(graph);
-		boolean hasSimpleCycles = true; /* TODO this constant ist only for testing - remove after finishing */
-		System.out.println("----------------------------------------");
+		boolean hasSimpleCycles = jsc.hasSimpleCycles(graph);
 		
 		if(hasSimpleCycles)
 		{
 			System.out.println("Graph has simple cycles!\n");
 			System.out.println("Found cycles: ");
+			jsc.displaySimpleCycles();
 			
 			int amountCycles = jsc.getAmountSimpleCycles(graph);
-			
 			System.out.println("----------------------------------------");
 			System.out.println("Amount of cycles in Graph: " + amountCycles);
 		}

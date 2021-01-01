@@ -20,6 +20,12 @@ public class DirectedWeightedGraph
 		this.nodes = new ArrayList<>(graph.nodes);
 	}
 	
+	/**
+	 * Get Nodes (and weights if included) from csv and add them to the graph
+	 * @param filePath	path of csv file including nodes/edges
+	 * @param weightIncluded boolean indicating whether weight is included in file or not
+	 * @param csvHasHeader	boolean indicating whether file has header
+	 */
 	public void fromFile(String filePath, boolean weightIncluded, boolean csvHasHeader)
 	{
 		CSVReaderWriter csvrw = new CSVReaderWriter();
@@ -42,14 +48,15 @@ public class DirectedWeightedGraph
 				Node source;
 				int sourceID = nodesSource.get(i);
 				
-				if(!this.arrayListContains(sourceID))
+				//create new Node if id doesn't exists yet. But get the node if it exists
+				if(!this.contains(sourceID))
 					source = new Node();
 				else
 					source =  getNodeByID(sourceID);
-					
 				
 				source.setId(nodesSource.get(i));
 				
+				//query to avoid nullpointer exceptions
 				if(i < nodesDestination.size())
 				{
 					Node dest = new Node();
@@ -60,7 +67,8 @@ public class DirectedWeightedGraph
 						source.addDirectedEdge(dest);
 				}
 				
-				if(!this.arrayListContains(sourceID))
+				//add source node if it doesn't exist yet
+				if(!this.contains(sourceID))
 					nodes.add(source);
 			}
 			
@@ -73,6 +81,10 @@ public class DirectedWeightedGraph
 		
 	}
 	
+	/**
+	 * Add nodes as destinations which haven't been added yet
+	 * @param destinations List of possible destinations
+	 */
 	private void addDestinationsToNodesIfMissing(ArrayList<Integer> destinations)
 	{
 		boolean exists;
@@ -96,22 +108,31 @@ public class DirectedWeightedGraph
 		}
 	}
 	
+	/**
+	 * Add node to graph
+	 * @param n new node
+	 */
 	public void addNode(Node n)
 	{
 		nodes.add(n);
 	}
 	
+	/**
+	 * Takes a node and all available Nodes that could be destinations. This method is used
+	 * to change/refactor a graph or to help creating a new graph from an existing one.
+	 * @param inputNode node which is the source node of the edge
+	 * @param availableNodes all nodes that are available in the (new) graph
+	 */
 	public void addEdgeRefactoredNode(Node inputNode, ArrayList<Node> availableNodes)
 	{
 		Node newNode = setNode(inputNode);
 		ArrayList<Edge> edgeList = inputNode.getEdges();
 		
 		//If inputNode is the only Node in that (sub-)graph
-		if(edgeList.isEmpty())
-		{
-			nodes.add(newNode);
-		}
-		
+//		if(edgeList.isEmpty())
+//		{
+//			nodes.add(newNode);
+//		}
 		
 		//Go through every edge of this node and check if Node is
 		//going to be used in new graph
@@ -137,6 +158,12 @@ public class DirectedWeightedGraph
 		}
 	}
 	
+	/**
+	 * Gets the reference to a node with the same id if it exists and 
+	 * creates a new one if it doesn't
+	 * @param inputNode node that should be copied
+	 * @return the new added node
+	 */
 	private Node setNode(Node inputNode)
 	{
 		Node newNode; 
@@ -158,16 +185,29 @@ public class DirectedWeightedGraph
 		return newNode;
 	}
 	
+	/**
+	 * Get all nodes from graph
+	 * @return ArrayList containing all nodes of the graph
+	 */
 	public ArrayList<Node> getNodes()
 	{
 		return this.nodes;
 	}
 	
+	/**
+	 * Get the first node in the graph/ArrayList
+	 * @return the first node in the graph
+	 */
 	public Node getFirstNode()
 	{
 		return this.nodes.get(0);
 	}
 	
+	/**
+	 * Searches the graph for a node with a specific id and returns it
+	 * @param id id of the node that should be found
+	 * @return the found node - null if it wasn't found
+	 */
 	public Node getNodeByID(int id)
 	{
 		for(Node n : nodes)
@@ -179,16 +219,12 @@ public class DirectedWeightedGraph
 		return null;
 	}
 	
-	private boolean arrayListContains(int id)
-	{
-		for(Node n : nodes)
-		{
-			if(n.getId() == id) return true;
-		}
-		
-		return false;
-	}
-	
+
+	/**
+	 * Searches the graph for a specific node 
+	 * @param n node being searched for
+	 * @return true if it was found and alfs if it wasn't
+	 */
 	public boolean contains(Node n)
 	{
 		for(Node internNode : nodes)
@@ -199,6 +235,11 @@ public class DirectedWeightedGraph
 		return false;
 	}
 	
+	/**
+	 * Searches the graph for a node with a specific id
+	 * @param id id of the node that should be found
+	 * @return true if it was found and false if it wasn't
+	 */
 	public boolean contains(int id)
 	{
 		for(Node n : nodes)
@@ -209,6 +250,10 @@ public class DirectedWeightedGraph
 		return false;
 	}
 	
+	/**
+	 * deletes a node from the graph
+	 * @param n node to be deleted
+	 */
 	public void deleteNode(Node n)
 	{
 		Node intern = null;
@@ -220,6 +265,10 @@ public class DirectedWeightedGraph
 		}
 	}
 	
+	/**
+	 * Searches for a node by id and deletes it
+	 * @param id id of the node to be deleted
+	 */
 	public void deleteNode(int id)
 	{
 		for(Node n : nodes)
@@ -232,6 +281,10 @@ public class DirectedWeightedGraph
 		}
 	}
 	
+	/**
+	 * Deletes a node and all its edges.
+	 * @param n node to be deleted
+	 */
 	public void purgeNode(Node n)
 	{
 		Node intern = null;
@@ -250,6 +303,10 @@ public class DirectedWeightedGraph
 		}
 	}
 	
+	/**
+	 * Determines if graph is empty
+	 * @return true if it is and false if it isn't
+	 */
 	public boolean isEmpty()
 	{
 		return nodes.isEmpty();

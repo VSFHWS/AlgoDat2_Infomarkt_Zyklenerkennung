@@ -20,16 +20,28 @@ public class Edge
 		this.weight = 0d;
 	}
 	
+	/**
+	 * Gets the source node
+	 * @return source node
+	 */
 	public Node getSourceNode()
 	{
 		return this.sourceNode;
 	}
 	
+	/**
+	 * Gets the destination node
+	 * @return destination node
+	 */
 	public Node getDestinationNode()
 	{
 		return this.destinationNode;
 	}
 	
+	/**
+	 * Gets the weight of the edge
+	 * @return weight of the edge
+	 */
 	public double getWeight()
 	{
 		return this.weight;
