@@ -1,6 +1,5 @@
 package graph;
 
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,7 +18,6 @@ public class DG {
     private Map<Integer, Integer> originalToLabel;
     private Map<Integer, Integer> labelToOriginal;
 
-
     public DG (int vertexCount) {
         if (vertexCount < 0) throw new IllegalArgumentException("Vertex count can't be smaller than 0.");
         vertices = new ArrayList<>();
@@ -27,7 +25,6 @@ public class DG {
             vertices.add(new Vertex(i));
         }
     }
-
 
     public DG (List<Integer> vertexLabels, int vertexCount) {
         this(vertexCount);
@@ -41,7 +38,6 @@ public class DG {
         }
     }
 
-
     public void addEdge(int from, int to) {
         if (hasLabel) {
             from = labelToOriginal.get(from);
@@ -54,28 +50,20 @@ public class DG {
         return vertices.get(id);
     }
 
-    public void removeVertex(int id) {
-        if (hasLabel) {
-            id = labelToOriginal.remove(id);
-            originalToLabel.remove(id);
-        }
-
-        if (!vertices.contains(id)) throw new RuntimeException("Id not in vertices list.");
-        vertices.remove(id);
-
-        for (Vertex v : vertices) {
-            int finalId = id;
-            v.edges.removeIf(e -> e.to == finalId);
-        }
-    }
-
     public ArrayList<Vertex> getVertices() {
         return vertices;
     }
 
-
     public int size() {
         return vertices.size();
+    }
+
+    public boolean hasLabel() {
+        return this.hasLabel;
+    }
+
+    public int getLabel(int original) {
+        return originalToLabel.get(original);
     }
 
     // Create a graph from a .txt file
@@ -167,16 +155,8 @@ public class DG {
             return id;
         }
 
-        public void setId(int id) {
-            this.id = id;
-        }
-
         public ArrayList<Edge> getEdges() {
             return edges;
-        }
-
-        public void setEdges(ArrayList<Edge> edges) {
-            this.edges = edges;
         }
 
         @Override
@@ -200,14 +180,6 @@ public class DG {
             this.to = to;
         }
 
-        public Vertex getFromVertex() {
-            return getVertex(from);
-        }
-
-        public Vertex getToVertex() {
-            return getVertex(to);
-        }
-
         public int getFrom() {
             return from;
         }
@@ -216,17 +188,14 @@ public class DG {
             return to;
         }
 
-        public void setFrom(int from) {
-            this.from = from;
-        }
-
-        public void setTo(int to) {
-            this.to = to;
-        }
-
         @Override
         public String toString() {
-            return (from+1) + " -> " + (to+1);
+            if (hasLabel) {
+                return originalToLabel.get(from) + " -> " + originalToLabel.get(to);
+            } else {
+                return from + " -> " + to;
+
+            }
         }
     }
 }
