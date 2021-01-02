@@ -10,5 +10,6 @@ public class Main {
 
         List<List<Integer>> johnsonResult = JohnsonsAlgorithm.calculateCycles(graph);
 
+        System.out.println(johnsonResult);
     }
 }

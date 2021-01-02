@@ -13,10 +13,10 @@ public class TarjansAlgorithm {
     private static Map<Integer, Integer> lowTime;
     private static int time;
 
-    private static List<Set<Integer>> result;
+    private static List<List<Integer>> result;
 
 
-    public static List<Set<Integer>> calculateSCC(DG graph) {
+    public static List<List<Integer>> calculateSCC(DG graph) {
         setup();
 
         // start from any vertex in the graph
@@ -56,13 +56,15 @@ public class TarjansAlgorithm {
         // If vertex low time is same as visited time then this is the start vertex for SCC
         // Keep popping until finding current vertex. All part of SCC.
         if (visitedTime.get(vertex.getId()).equals(lowTime.get(vertex.getId()))) {
-            Set<Integer> sCC = new HashSet<>();
+            List<Integer> sCC = new ArrayList<>();
             int v;
             do {
                 v = stack.pollFirst();
                 onStack.remove(v);
                 sCC.add(v);
             } while (vertex.getId() != v);
+            // Order the sCC in ascending fashion
+            Collections.sort(sCC);
             result.add(sCC);
         }
     }
