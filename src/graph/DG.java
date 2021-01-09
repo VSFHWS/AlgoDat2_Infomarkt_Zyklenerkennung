@@ -12,11 +12,13 @@ import java.util.stream.Collectors;
 
 public class DG {
     private final ArrayList<Vertex> vertices;
-    // Graph vertices start at 0 but some subGraphs might have vertices that start at another int.
-    // Carry a map of original labels -> Example: startVertex = 7 is converted to 0 in the class.
+
+    // Graph vertices start at 0 but some subGraphs might have vertices that start at another int
+    // Carry a map of original labels -> Example: startVertex = 7 is converted to 0 in the class
     private boolean hasLabel = false;
     private Map<Integer, Integer> originalToLabel;
     private Map<Integer, Integer> labelToOriginal;
+
 
     public DG (int vertexCount) {
         if (vertexCount < 0) throw new IllegalArgumentException("Vertex count can't be smaller than 0.");
@@ -77,7 +79,8 @@ public class DG {
                             .map(x -> x.split(" "))
                             .flatMap(Arrays::stream)
                             .filter(x -> !x.isEmpty())
-                            .map(x -> x.replaceAll("\\{", "").replaceAll("}", "").replaceAll(" ", ""))
+                            .map(x -> x.replaceAll("\\{", "").replaceAll("}", "")
+                                    .replaceAll(" ", ""))
                             .map(x -> x.split(","))
                             .map(x -> new int[]{ Integer.parseInt(x[0]), Integer.parseInt(x[1]) })
                             .collect(Collectors.toList());
@@ -95,19 +98,6 @@ public class DG {
             System.out.println("An error has occurred while loading from path: " + file.toAbsolutePath().toString());
             throw new RuntimeException(e);
         }
-    }
-
-    // Creates a graph as copy of G
-    public DG cloneGraph() {
-        DG graph = new DG(vertices.size());
-
-        for(Vertex v : vertices) {
-            for(DG.Edge e : v.getEdges()) {
-                graph.addEdge(e.from, e.to);
-            }
-
-        }
-        return graph;
     }
 
     public void display() {

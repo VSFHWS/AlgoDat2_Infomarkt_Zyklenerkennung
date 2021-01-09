@@ -27,7 +27,7 @@ public class JohnsonsAlgorithm {
                 blockedMap.clear();
                 calculateCyclesSub(subGraphs.get(i), startVertex, startVertex);
 
-                // Now remove the startVertex from the current subGraph by creating a new one from a changed scc
+                // Remove the startVertex from the current subGraph by creating a new one from a changed scc
                 sccs.get(i).remove(0);
                 subGraphs.set(i, subGraphFromSCCBlueprint(sccs.get(i), graph));
             }
@@ -52,8 +52,7 @@ public class JohnsonsAlgorithm {
                 Collections.reverse(cycle);
                 stack.pop();
 
-                // Before adding the cycle to the final list of all cycles, the vertex id's have to be converted back
-                // to their original label
+                // Before adding the cycle to the final list of all cycles, the vertex id's converted to original label
                 if (subGraph.hasLabel()) {
                     for (int i = 0; i < cycle.size(); i++) {
                         cycle.set(i, subGraph.getLabel(cycle.get(i)));

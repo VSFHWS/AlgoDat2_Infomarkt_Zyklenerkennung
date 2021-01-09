@@ -17,6 +17,7 @@ public class TarjansAlgorithm {
 
 
     public static List<List<Integer>> calculateSCC(DG graph) {
+        // Initialize all data structures
         setup();
 
         // start from any vertex in the graph
