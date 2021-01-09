@@ -1,6 +1,7 @@
 package graph;
 
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -93,10 +94,10 @@ public class DG {
             }
 
             return graph;
-
+        } catch (NoSuchFileException e) {
+            throw new RuntimeException("There is no file at path: " + file.toAbsolutePath().toString());
         } catch (Exception e) {
-            System.out.println("An error has occurred while loading from path: " + file.toAbsolutePath().toString());
-            throw new RuntimeException(e);
+            throw new RuntimeException("An error has occurred. File path: " + file.toAbsolutePath().toString());
         }
     }
 
