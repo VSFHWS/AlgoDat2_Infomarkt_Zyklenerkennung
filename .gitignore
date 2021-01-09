@@ -1,6 +1,4 @@
 /infomarkt.iml
-/.idea/dictionaries/Luca.xml
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/uiDesigner.xml
-/.idea/vcs.xml
+/.idea
+
+/out
