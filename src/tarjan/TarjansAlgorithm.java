@@ -4,6 +4,7 @@ import graph.DG;
 
 import java.util.*;
 
+
 public class TarjansAlgorithm {
     private static Set<Integer> onStack;
     private static Deque<Integer> stack;

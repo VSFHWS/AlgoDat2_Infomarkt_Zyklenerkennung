@@ -5,6 +5,7 @@ import tarjan.TarjansAlgorithm;
 
 import java.util.*;
 
+
 public class JohnsonsAlgorithm {
     private static List<DG> subGraphs;
     private static List<List<Integer>> sccs;
@@ -52,8 +53,7 @@ public class JohnsonsAlgorithm {
                 Collections.reverse(cycle);
                 stack.pop();
 
-                // Before adding the cycle to the final list of all cycles, the vertex id's have to be converted back
-                // to their original label
+                // Before adding the cycle to the final list of all cycles, the vertex id's converted to original
                 if (subGraph.hasLabel()) {
                     for (int i = 0; i < cycle.size(); i++) {
                         cycle.set(i, subGraph.getLabel(cycle.get(i)));
@@ -67,13 +67,9 @@ public class JohnsonsAlgorithm {
             }
         }
 
-        // if cycle is found with current vertex then recursively unblock vertex and all vertices
-        // which depend on this vertex
         if (foundCycle) {
             // Remove from blockedSet, then remove all other vertices dependent on this vertex from blockedSet
             unblock(currentVertex);
-        // if no cycle is found with current vertex then don't unblock it. But find all its neighbours and add this vertex
-        // to their blockedMap. If any of those neighbours ever get unblocked then unblock current vertex as well
         } else {
             for (DG.Edge e : subGraph.getVertex(currentVertex).getEdges()) {
                 int w = e.getTo();

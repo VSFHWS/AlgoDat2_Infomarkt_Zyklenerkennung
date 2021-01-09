@@ -6,8 +6,10 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 /***
  * Implementation of a directed graph
+ * Vertex numeration starts at 0
  */
 
 public class DG {
@@ -38,6 +40,7 @@ public class DG {
         }
     }
 
+    // Doesn't have label support
     public void addEdge(int from, int to) {
         if (hasLabel) {
             from = labelToOriginal.get(from);
@@ -77,7 +80,8 @@ public class DG {
                             .map(x -> x.split(" "))
                             .flatMap(Arrays::stream)
                             .filter(x -> !x.isEmpty())
-                            .map(x -> x.replaceAll("\\{", "").replaceAll("}", "").replaceAll(" ", ""))
+                            .map(x -> x.replaceAll("\\{", "").replaceAll("}", "")
+                                    .replaceAll(" ", ""))
                             .map(x -> x.split(","))
                             .map(x -> new int[]{ Integer.parseInt(x[0]), Integer.parseInt(x[1]) })
                             .collect(Collectors.toList());
@@ -97,25 +101,12 @@ public class DG {
         }
     }
 
-    // Creates a graph as copy of G
-    public DG cloneGraph() {
-        DG graph = new DG(vertices.size());
-
-        for(Vertex v : vertices) {
-            for(DG.Edge e : v.getEdges()) {
-                graph.addEdge(e.from, e.to);
-            }
-
-        }
-        return graph;
-    }
-
     public void display() {
         // Check if there vertex labels available
         if (hasLabel) {
             for (Vertex v : vertices) {
                 for (Edge e : v.edges) {
-                    System.out.println((originalToLabel.get(e.from)+1) + " -> " + (originalToLabel.get(e.to)+1));
+                    System.out.println((originalToLabel.get(e.from)) + " -> " + (originalToLabel.get(e.to)));
                 }
             }
 
