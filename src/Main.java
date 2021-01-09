@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        // TODO: DG.display() still + 1
-        DG graph = DG.createGraphFromFile("graphExample.txt");
+        DG graph = DG.createGraphFromFile("graphWithCycles.txt");
 
         List<List<Integer>> johnsonResult = JohnsonsAlgorithm.calculateCycles(graph);
 
-        System.out.println(johnsonResult);
+        // print the result of the Johnson algorithm
+        johnsonResult.forEach(System.out::println);
     }
 }
