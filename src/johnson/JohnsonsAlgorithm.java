@@ -17,8 +17,10 @@ public class JohnsonsAlgorithm {
 
 
     public static List<List<Integer>> calculateCycles(DG graph) {
+        // Initialize arrays and calculate Tarjans algo
         setup(graph);
 
+        // Always start with vertex 0
         int startVertex = 0;
 
         for (int i = 0; i < subGraphs.size(); i++) {
@@ -128,6 +130,9 @@ public class JohnsonsAlgorithm {
         DG subGraph;
 
         // Check if the startVertex from the SCC is 0 or not. If not we need labels
+        // This is a workaround because some subgraphs start at e.g. 2, 5 or 7 so the graph object carries a hashmap
+        // which translates to the real vertex number (the graph calculates from 0 in the background). More info in the
+        // comments in the graph class
         if (scc.contains(0)) {
             subGraph = new DG(scc.size());
         } else {

@@ -57,16 +57,16 @@ public class TarjansAlgorithm {
         // If vertex low time is same as visited time then this is the start vertex for SCC
         // Keep popping until finding current vertex. All part of SCC.
         if (visitedTime.get(vertex.getId()).equals(lowTime.get(vertex.getId()))) {
-            List<Integer> sCC = new ArrayList<>();
+            List<Integer> scc = new ArrayList<>();
             int v;
             do {
                 v = stack.pollFirst();
                 onStack.remove(v);
-                sCC.add(v);
+                scc.add(v);
             } while (vertex.getId() != v);
             // Order the sCC in ascending fashion
-            Collections.sort(sCC);
-            result.add(sCC);
+            Collections.sort(scc);
+            result.add(scc);
         }
     }
 
