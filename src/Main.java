@@ -8,12 +8,12 @@ import java.util.Set;
 public class Main {
     public static void main(String[] args) {
         DG [] graphs = new DG [] {
-                DG.createGraphFromFile("graphWithoutCycles1.txt"),
-                DG.createGraphFromFile("graphWithoutCycles2.txt"),
-                DG.createGraphFromFile("graphWithOneCycle1.txt"),
-                DG.createGraphFromFile("graphWithOneCycle2.txt"),
-                DG.createGraphFromFile("graphWithCycles1.txt"),
-                DG.createGraphFromFile("graphWithCycles2.txt")
+                DG.createGraphFromFile("src/graphExamples/graphWithoutCycles1.txt"),
+                DG.createGraphFromFile("src/graphExamples/graphWithoutCycles2.txt"),
+                DG.createGraphFromFile("src/graphExamples/graphWithOneCycle1.txt"),
+                DG.createGraphFromFile("src/graphExamples/graphWithOneCycle2.txt"),
+                DG.createGraphFromFile("src/graphExamples/graphWithCycles1.txt"),
+                DG.createGraphFromFile("src/graphExamples/graphWithCycles2.txt")
         };
 
         int graphNum = 0;
