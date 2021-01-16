@@ -150,4 +150,16 @@ public class JohnsonsAlgorithm {
 
         return subGraph;
     }
+
+    public static void outputJohnson(List<List<Integer>> johnsonResult) {
+        if (johnsonResult.size() == 0) {
+            System.out.println("No cycles detected.");
+        } else if (johnsonResult.size() == 1) {
+            System.out.println("1 cycle detected:");
+            johnsonResult.forEach(System.out::println);
+        } else {
+            System.out.println(johnsonResult.size() + " cycles detected:");
+            johnsonResult.forEach(System.out::println);
+        }
+    }
 }

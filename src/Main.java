@@ -16,7 +16,7 @@ public class Main {
                 DG.createGraphFromFile("src/graphExamples/graphWithCycles2.txt")
         };
 
-        int graphNum = 0;
+        int graphNum = 5;
 
         // calculate Tarjan's algorithm for visualisation purposes
         List<List<Integer>> tarjanResult = TarjansAlgorithm.calculateSCC(graphs[graphNum]);
@@ -31,7 +31,6 @@ public class Main {
 
         // print the result of the Johnson algorithm
         System.out.println("\nJohnson's algorithm result:");
-        if (johnsonResult.size() == 0) System.out.println("No cycles detected.");
-        else johnsonResult.forEach(System.out::println);
+        JohnsonsAlgorithm.outputJohnson(johnsonResult);
     }
 }
