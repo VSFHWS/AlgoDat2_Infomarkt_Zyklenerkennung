@@ -8,15 +8,14 @@ import java.util.Set;
 public class Main {
     public static void main(String[] args) {
         DG [] graphs = new DG [] {
-                DG.createGraphFromFile("src/graphExamples/graphWithoutCycles1.txt"),
-                DG.createGraphFromFile("src/graphExamples/graphWithoutCycles2.txt"),
-                DG.createGraphFromFile("src/graphExamples/graphWithOneCycle1.txt"),
-                DG.createGraphFromFile("src/graphExamples/graphWithOneCycle2.txt"),
-                DG.createGraphFromFile("src/graphExamples/graphWithCycles1.txt"),
-                DG.createGraphFromFile("src/graphExamples/graphWithCycles2.txt")
+                DG.createGraphFromFile("src/graphExamples/graphWithoutCycles1.txt"), // 0
+                DG.createGraphFromFile("src/graphExamples/graphWithoutCycles2.txt"), // 1
+                DG.createGraphFromFile("src/graphExamples/graphWithOneCycle1.txt"), // 2
+                DG.createGraphFromFile("src/graphExamples/graphWithOneCycle2.txt"), // 3
+                DG.createGraphFromFile("src/graphExamples/graphWithCycles.txt") // 4
         };
 
-        int graphNum = 5;
+        int graphNum = 3;
 
         // calculate Tarjan's algorithm for visualisation purposes
         List<List<Integer>> tarjanResult = TarjansAlgorithm.calculateSCC(graphs[graphNum]);

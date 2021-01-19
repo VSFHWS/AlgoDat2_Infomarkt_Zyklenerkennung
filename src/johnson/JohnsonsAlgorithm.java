@@ -129,13 +129,26 @@ public class JohnsonsAlgorithm {
     private static DG subGraphFromSCCBlueprint(List<Integer> scc, DG graph) {
         DG subGraph;
 
-        // Check if the startVertex from the SCC is 0 or not. If not we need labels
-        // This is a workaround because some subgraphs start at e.g. 2, 5 or 7 so the graph object carries a hashmap
-        // which translates to the real vertex number (the graph calculates from 0 in the background). More info in the
-        // comments in the graph class
+        // Check if the startVertex from the SCC is 0 or not and if the list is sequential.
+        // If not we need labels -> More info in the DG class
+        boolean isSequentialAndStartsAtZero = false;
+
         if (scc.contains(0)) {
+            for (int i = 0; i < scc.size()-1; i++) {
+                if (scc.get(i + 1) == scc.get(i) + 1) {
+                    isSequentialAndStartsAtZero = true;
+                } else {
+                    isSequentialAndStartsAtZero = false;
+                    break;
+                }
+            }
+        }
+
+        if (isSequentialAndStartsAtZero) {
+            // Initialize subGraph without a label
             subGraph = new DG(scc.size());
         } else {
+            // Initialize subGraph with a label
             subGraph = new DG(new ArrayList<>(scc), scc.size());
         }
 
